@@ -1,5 +1,5 @@
 
-Easy Environment where you can 
+Docker Environment where you can run and work easilly on Sylius project
 
 # Run with docker compose
 Run this command to build image and run containers.
