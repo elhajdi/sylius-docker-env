@@ -17,8 +17,8 @@ git clone -b 1.11 git@github.com:Sylius/Sylius-Standard.git
 ```
 
 ## Configure your database first 
-- create database on http://localhost:8888?server=mysql&username=db_&db=db_db
-- modify **DATABASE_URL** within **.env** in your project with *DATABASE_URL=mysql://[root]:[thepassword]@mysql/[database_name]*
+- create database on http://localhost:8888?server=mysql&username=sylius_du&db=sylius_db
+- modify **DATABASE_URL** within **.env** in your project with *DATABASE_URL=mysql://[sylius_du]:[thesecret]@mysql/[database_name]*
 
 
 # Working on sylius project
