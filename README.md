@@ -26,6 +26,7 @@ git clone -b 1.11 git@github.com:Sylius/Sylius-Standard.git
 ```
 docker compose exec sylius bash
 cd [your_project_name_inside_web]
+composer install
 bin/console sylius:install
 yarn install
 yarn build
