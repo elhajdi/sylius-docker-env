@@ -1,0 +1,5 @@
+web/*
+!web/.gitignore
+.docker/mysql/data/*
+.docker/db/data/*
+.docker/nginx/logs/*

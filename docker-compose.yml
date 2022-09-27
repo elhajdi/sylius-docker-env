@@ -1,0 +1,71 @@
+version: '3.6'
+
+services:
+  web:
+    image: nginx:${NGINX_VERSION:-latest}
+    container_name: ddr-web
+    volumes:
+      - ${NGINX_CONF_DIR_VHOST:-./.docker/nginx}:/etc/nginx/conf.d
+      - ${NGINX_LOG_DIR:-./.docker/nginx/logs}:/var/log/nginx
+      - ./${PROJECT_WEB}:/var/www/html/
+    ports:
+      - 80:80
+    depends_on:
+      - mysql
+    # networks:
+    #   - ddr-ntwk
+
+  sylius:
+    container_name: ddr-sylius
+    build:
+      dockerfile: ./.docker/sylius/Dockerfile
+    environment:
+      - APP_ENV=dev
+      - APP_DEBUG=1
+      - PHP_VERSION=${PHP_VERSION}
+      - PHP_DATE_TIMEZONE=${PHP_DATE_TIMEZONE:-UTC}
+    volumes: 
+      - ./${PROJECT_WEB}:/var/www/html/
+      - ./.docker/sylius/php/php.ini:/usr/local/etc/php/conf.d/php-custom.ini
+      - ./.docker/sylius/php/php-cli.ini:/usr/local/etc/php/conf.d/php-cli-custom.ini
+    ports:
+      - "9900:8000"
+      - "9901:8001"
+  mysql:
+    container_name: ddr-db
+    image: mariadb:10.4
+    restart: always
+    ports:
+      - 33306:3306
+    volumes:
+        - .docker/mysql/data:/var/lib/mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-thepassword}"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE:-ddr_db}"
+      - "MYSQL_USER=${MYSQL_USER:-ddr_du}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD:-thesecret}"
+    # networks:
+    #   - ddr-ntwk
+
+  mailhog:
+    container_name: ddr_mailhog
+    image: 'mailhog/mailhog:latest'
+    ports:
+        - '${FORWARD_MAILHOG_PORT:-1025}:1025'
+        - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
+    # networks:
+    #   - ddr-ntwk
+
+  adminer:
+    container_name: ddr-adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8888:8080
+    depends_on:
+      - mysql
+#     networks:
+#       - ddr-ntwk
+
+# networks:
+#   - ddr-ntwk
