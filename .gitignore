@@ -3,3 +3,5 @@ web/*
 .docker/mysql/data/*
 .docker/db/data/*
 .docker/nginx/logs/*
+.docker/nginx/vhosts/*
+!.docker/nginx/vhosts/sylius.conf
