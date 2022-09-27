@@ -41,8 +41,8 @@ services:
         - .docker/mysql/data:/var/lib/mysql
     environment:
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-thepassword}"
-      - "MYSQL_DATABASE=${MYSQL_DATABASE:-ddr_db}"
-      - "MYSQL_USER=${MYSQL_USER:-ddr_du}"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE:-sylius_db}"
+      - "MYSQL_USER=${MYSQL_USER:-sylius_du}"
       - "MYSQL_PASSWORD=${MYSQL_PASSWORD:-thesecret}"
     # networks:
     #   - ddr-ntwk
