@@ -3,7 +3,7 @@ version: '3.6'
 services:
   web:
     image: nginx:${NGINX_VERSION:-latest}
-    container_name: ddr-web
+    container_name: sylius-web
     volumes:
       - ${NGINX_CONF_DIR_VHOST:-./.docker/nginx}:/etc/nginx/conf.d
       - ${NGINX_LOG_DIR:-./.docker/nginx/logs}:/var/log/nginx
@@ -12,16 +12,16 @@ services:
       - 80:80
     depends_on:
       - mysql
-    # networks:
-    #   - ddr-ntwk
+    networks:
+      - sylius-ntwk
 
   sylius:
-    container_name: ddr-sylius
+    container_name: sylius-sylius
     build:
       dockerfile: ./.docker/sylius/Dockerfile
     environment:
-      - APP_ENV=dev
-      - APP_DEBUG=1
+      - APP_ENV=${APP_ENV:-dev}
+      - APP_DEBUG=${APP_DEBUG:-1}
       - PHP_VERSION=${PHP_VERSION}
       - PHP_DATE_TIMEZONE=${PHP_DATE_TIMEZONE:-UTC}
     volumes: 
@@ -31,8 +31,12 @@ services:
     ports:
       - "9900:8000"
       - "9901:8001"
+    # command: sh -c "chown -R www-data:www-data /var/www/html/"
+    networks:
+      - sylius-ntwk
+
   mysql:
-    container_name: ddr-db
+    container_name: sylius-db
     image: mariadb:10.4
     restart: always
     ports:
@@ -44,8 +48,8 @@ services:
       - "MYSQL_DATABASE=${MYSQL_DATABASE:-sylius_db}"
       - "MYSQL_USER=${MYSQL_USER:-sylius_du}"
       - "MYSQL_PASSWORD=${MYSQL_PASSWORD:-thesecret}"
-    # networks:
-    #   - ddr-ntwk
+    networks:
+      - sylius-ntwk
 
   mailhog:
     container_name: ddr_mailhog
@@ -53,19 +57,19 @@ services:
     ports:
         - '${FORWARD_MAILHOG_PORT:-1025}:1025'
         - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
-    # networks:
-    #   - ddr-ntwk
+    networks:
+      - sylius-ntwk
 
   adminer:
-    container_name: ddr-adminer
+    container_name: sylius-adminer
     image: adminer
     restart: always
     ports:
       - 8888:8080
     depends_on:
       - mysql
-#     networks:
-#       - ddr-ntwk
+    networks:
+      - sylius-ntwk
 
-# networks:
-#   - ddr-ntwk
+networks:
+  sylius-ntwk:
