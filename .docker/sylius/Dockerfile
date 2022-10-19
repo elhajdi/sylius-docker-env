@@ -1,5 +1,5 @@
 ARG PHP_VERSION=8.1.10
-ARG NODEJS_VERSION=16.17.1
+ARG NODEJS_VERSION=14.x
 ARG COMPOSER_VERSION=2
 
 
@@ -11,8 +11,11 @@ FROM php:${PHP_VERSION}-fpm
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends 
 RUN apt-get install -y locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip libpq-dev 
-RUN apt-get install -y nodejs npm wget 
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs 
 RUN apt-get install -y apt-transport-https lsb-release ca-certificates
+
+RUN apt-get install -y wget vim
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen  \
     &&  echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen \
